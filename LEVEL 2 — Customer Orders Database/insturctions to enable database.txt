@@ -1,0 +1,2 @@
+Double click on the file and it will open workbench if you have properly installed that in your system. After it opens click on database from the menu on the top and then select connect to database. A dialogue box will open click ok. Now you will see on the left pane under schemas, the database is selected and is in bold. 
+
