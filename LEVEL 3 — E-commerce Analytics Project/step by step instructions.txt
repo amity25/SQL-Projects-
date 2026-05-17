@@ -63,8 +63,14 @@ CREATE TABLE products (
     product_id INT PRIMARY KEY,
     product_name VARCHAR(100),
     category VARCHAR(50),
-    price DECIMAL(10,2)
+    price DECIMAL(10,2)  
 );
+
+ #For price DECIMAL(10,2) 
+
+#10 (Precision): This is the total number of digits the column can store, including digits on both sides of the decimal point.
+#2 (Scale): This is the number of digits specifically reserved for the fractional part (after the decimal point).
+
 
 TABLE 3 — Orders
 CREATE TABLE orders (
@@ -80,6 +86,106 @@ CREATE TABLE orders (
     FOREIGN KEY (product_id)
     REFERENCES products(product_id)
 );
+
+
+Explanation for Primary Key and Foreign Key 
+
+We add FOREIGN KEY and REFERENCES when one table is connected to another table.
+
+This comes from understanding the relationship between tables in a database.
+
+In your E-commerce project:
+
+One customer can place many orders
+One product can appear in many orders
+One order can have one payment
+
+So tables are not independent. They are connected.
+
+Understanding the Logic
+
+Think like this:
+
+Customers Table
+customer_id
+
+This uniquely identifies every customer.
+
+Example:
+
+1 → Amit
+2 → Priya
+3 → Rahul
+
+This column becomes the table's identity.
+
+That is why we make it:
+
+PRIMARY KEY
+Now Look at Orders Table
+
+Orders table needs to know:
+
+Which customer placed this order?
+
+So we add:
+
+customer_id
+
+inside orders table.
+
+But this customer_id should only contain values that already exist in customers table.
+
+That is where FOREIGN KEY comes in.
+
+Meaning of FOREIGN KEY
+FOREIGN KEY (customer_id)
+REFERENCES customers(customer_id)
+
+means:
+
+The customer_id inside orders table must exist inside customers table.
+Real-World Analogy
+
+Imagine:
+
+Customers Table = List of all students in school
+
+Orders Table = Exam records
+
+If exam records contain a student ID that does not exist in school records, data becomes invalid.
+
+Foreign keys prevent this problem.
+
+Why We Added These Foreign Keys
+1. Customer Relationship
+FOREIGN KEY (customer_id)
+REFERENCES customers(customer_id)
+
+Reason:
+Every order must belong to a valid customer.
+
+2. Product Relationship
+FOREIGN KEY (product_id)
+REFERENCES products(product_id)
+
+Reason:
+Every order must contain a valid product.
+
+3. Payment Relationship
+FOREIGN KEY (order_id)
+REFERENCES orders(order_id)
+
+Reason:
+Every payment must belong to a valid order.
+
+Simple Rule to Identify Foreign Keys
+
+Ask this question:
+
+"Is this column coming from another table?"
+
+If YES → it is usually a foreign key.
 
 TABLE 4 — Payments
 CREATE TABLE payments (
