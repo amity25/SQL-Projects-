@@ -201,21 +201,27 @@ CREATE TABLE payments (
 
 
 STEP 3 — INSERT SAMPLE DATA
-Insert Customers
+
+#Insert Customers
+
 INSERT INTO customers VALUES
 (1, 'Amit Sharma', 'Delhi', '2024-01-10'),
 (2, 'Priya Singh', 'Mumbai', '2024-02-15'),
 (3, 'Rahul Verma', 'Bangalore', '2024-03-01'),
 (4, 'Sneha Kapoor', 'Delhi', '2024-03-20'),
 (5, 'Arjun Mehta', 'Pune', '2024-04-05');
-Insert Products
+
+#Insert Products
+
 INSERT INTO products VALUES
 (101, 'Laptop', 'Electronics', 60000),
 (102, 'Phone', 'Electronics', 30000),
 (103, 'Shoes', 'Fashion', 2500),
 (104, 'Watch', 'Accessories', 5000),
 (105, 'Headphones', 'Electronics', 2000);
-Insert Orders
+
+#Insert Orders
+
 INSERT INTO orders VALUES
 (1001, 1, 101, 1, '2024-05-01'),
 (1002, 2, 103, 2, '2024-05-03'),
@@ -223,7 +229,9 @@ INSERT INTO orders VALUES
 (1004, 3, 102, 1, '2024-05-06'),
 (1005, 4, 104, 2, '2024-05-07'),
 (1006, 5, 103, 1, '2024-05-08');
-Insert Payments
+
+#Insert Payments
+
 INSERT INTO payments VALUES
 (1, 1001, 'Credit Card', 60000, '2024-05-01'),
 (2, 1002, 'UPI', 5000, '2024-05-03'),
@@ -235,14 +243,10 @@ INSERT INTO payments VALUES
 
 STEP 4 — VERIFY DATA
 
-Run:
 
 SELECT * FROM customers;
-
 SELECT * FROM products;
-
 SELECT * FROM orders;
-
 SELECT * FROM payments;
 
 
@@ -277,7 +281,11 @@ SELECT *
 FROM table1
 INNER JOIN table2
 ON table1.column = table2.column;
+
+
 PRACTICE JOIN
+
+
 SELECT
     o.order_id,
     c.customer_name,
@@ -288,6 +296,34 @@ INNER JOIN customers c
 ON o.customer_id = c.customer_id
 INNER JOIN products p
 ON o.product_id = p.product_id;
+
+Explanation - Why Use o. ?
+
+Because multiple tables are used in this query.
+
+Sometimes different tables may have same column names like:
+
+customer_id
+product_id
+order_id
+
+So SQL needs clarity.
+
+o. tells SQL exactly which table the column belongs to
+
+c.customer_name,
+
+Meaning
+
+c is alias for customers table.
+
+INNER JOIN customers c
+
+So:
+c.customer_name
+
+means:
+Take customer_name from customers table.
 
 What you learn:
 
