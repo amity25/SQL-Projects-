@@ -345,6 +345,15 @@ INNER JOIN products p
 ON o.product_id = p.product_id
 GROUP BY p.category
 ORDER BY total_revenue DESC;
+
+How the Query Works -
+
+SUM(o.quantity * p.price) AS total_revenue: For every order, the database multiplies the number of items ordered (quantity) by the product's price (price). It then adds all of these subtotals together to find the total_revenue.
+INNER JOIN ... ON ...: It links the orders table and products table together so that it can find the price of the specific product in each order.
+GROUP BY p.category: It bundles the results into groups based on the category of the products (e.g., all "Electronics" orders are grouped into one sum, all "Clothing" orders into another).
+ORDER BY total_revenue DESC: It sorts the final grouped results so the highest-grossing categories appear at the very top. 
+
+
 What You Learn
 SUM()
 Revenue calculation
@@ -365,6 +374,15 @@ INNER JOIN products p
 ON o.product_id = p.product_id
 GROUP BY p.product_name
 ORDER BY total_units_sold DESC;
+
+How It Works - 
+
+SELECT p.product_name: Displays the name of the product.
+SUM(o.quantity): Adds up all instances of that product ordered in the orders table.
+INNER JOIN... ON o.product_id = p.product_id: Matches the orders to their specific product details.
+GROUP BY p.product_name: Groups the sales so the total quantity calculation applies to each specific product.
+ORDER BY total_units_sold DESC: Sorts the final results from the highest number of units sold to the lowest.
+
 What You Learn
 Product analytics
 Sales trends
@@ -386,6 +404,16 @@ INNER JOIN payments pay
 ON o.order_id = pay.order_id
 GROUP BY c.customer_name
 ORDER BY lifetime_value DESC;
+
+Key logic:
+
+Joins: It links the customers table to their orders, then links those orders to the payments received.
+Aggregation: SUM(pay.payment_amount) adds up every payment record associated with that specific customer name.
+Grouping: GROUP BY c.customer_name ensures that all orders for "Alice Johnson" are collapsed into a single row. 
+
+
+
+
 What You Learn
 Customer analytics
 Multi-table joins
