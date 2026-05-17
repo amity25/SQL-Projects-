@@ -39,27 +39,17 @@ MySQL Community Server
 MySQL Workbench
 FOLDER STRUCTURE FOR GITHUB
 
-Create a project folder:
 
-ecommerce-analytics-project/
-│
-├── ecommerce_project.sql
-├── README.md
-├── project_screenshots/
-│
-├── datasets/
-│   ├── customers.csv
-│   ├── products.csv
-│   ├── orders.csv
-│   └── payments.csv
 STEP 1 — CREATE DATABASE
 
 Open MySQL Workbench and run:
 
 CREATE DATABASE ecommerce_project;
-
 USE ecommerce_project;
+
+
 STEP 2 — CREATE TABLES
+
 TABLE 1 — Customers
 CREATE TABLE customers (
     customer_id INT PRIMARY KEY,
@@ -67,6 +57,7 @@ CREATE TABLE customers (
     city VARCHAR(50),
     signup_date DATE
 );
+
 TABLE 2 — Products
 CREATE TABLE products (
     product_id INT PRIMARY KEY,
@@ -74,6 +65,7 @@ CREATE TABLE products (
     category VARCHAR(50),
     price DECIMAL(10,2)
 );
+
 TABLE 3 — Orders
 CREATE TABLE orders (
     order_id INT PRIMARY KEY,
@@ -88,6 +80,7 @@ CREATE TABLE orders (
     FOREIGN KEY (product_id)
     REFERENCES products(product_id)
 );
+
 TABLE 4 — Payments
 CREATE TABLE payments (
     payment_id INT PRIMARY KEY,
@@ -99,6 +92,8 @@ CREATE TABLE payments (
     FOREIGN KEY (order_id)
     REFERENCES orders(order_id)
 );
+
+
 STEP 3 — INSERT SAMPLE DATA
 Insert Customers
 INSERT INTO customers VALUES
@@ -130,6 +125,8 @@ INSERT INTO payments VALUES
 (4, 1004, 'Credit Card', 30000, '2024-05-06'),
 (5, 1005, 'UPI', 10000, '2024-05-07'),
 (6, 1006, 'Cash', 2500, '2024-05-08');
+
+
 STEP 4 — VERIFY DATA
 
 Run:
@@ -141,6 +138,8 @@ SELECT * FROM products;
 SELECT * FROM orders;
 
 SELECT * FROM payments;
+
+
 STEP 5 — UNDERSTAND TABLE RELATIONSHIPS
 
 Before writing queries understand:
@@ -162,6 +161,7 @@ orders
 products
 
 This is how real databases are connected.
+
 
 STEP 6 — LEARN INNER JOIN
 
@@ -188,6 +188,7 @@ What you learn:
 Multiple joins
 Aliases
 Connecting tables
+
 PROJECT TASK 1 — Revenue By Category
 
 Business Question:
@@ -207,6 +208,7 @@ SUM()
 Revenue calculation
 GROUP BY
 Business KPIs
+
 PROJECT TASK 2 — Best-Selling Products
 
 Business Question:
@@ -225,6 +227,7 @@ What You Learn
 Product analytics
 Sales trends
 Ranking products
+
 PROJECT TASK 3 — Customer Lifetime Value
 
 Business Question:
@@ -245,6 +248,7 @@ What You Learn
 Customer analytics
 Multi-table joins
 Revenue contribution
+
 PROJECT TASK 4 — Payment Trends
 
 Business Question:
@@ -262,6 +266,7 @@ What You Learn
 Payment analytics
 Transaction analysis
 COUNT + SUM together
+
 PROJECT TASK 5 — Top Cities
 
 Business Question:
@@ -282,6 +287,8 @@ BONUS TASKS (IMPORTANT FOR GITHUB)
 
 These make your project look advanced.
 
+
+
 BONUS 1 — Monthly Revenue
 SELECT
     MONTH(payment_date) AS month_number,
@@ -289,10 +296,12 @@ SELECT
 FROM payments
 GROUP BY MONTH(payment_date)
 ORDER BY month_number;
+
 BONUS 2 — Average Order Value
 SELECT
     AVG(payment_amount) AS average_order_value
 FROM payments;
+
 BONUS 3 — Repeat Customers
 SELECT
     c.customer_name,
@@ -302,6 +311,7 @@ INNER JOIN orders o
 ON c.customer_id = o.customer_id
 GROUP BY c.customer_name
 HAVING total_orders > 1;
+
 BONUS 4 — Most Expensive Product Sold
 SELECT
     p.product_name,
