@@ -1,0 +1,373 @@
+LEVEL 4 - INVENTORY & SUPPLY CHAIN ANALYTICS PROJECT
+
+Prerequisites:
+
+MySQL Server installed
+MySQL Workbench installed
+Basic knowledge of:
+SELECT
+WHERE
+ORDER BY
+GROUP BY
+JOIN
+
+In this project, you will learn how companies manage inventory, suppliers, and purchase orders using SQL.
+
+You will build a small supply chain database and answer business questions such as:
+
+Which products are running low on stock?
+How many units should be reordered?
+Which shipments arrived late?
+Which suppliers perform best?
+Which products are overstocked?
+Open MySQL Workbench.
+Connect to your MySQL server.
+Click "Create New SQL Tab".
+
+Run the following code:
+
+DROP DATABASE IF EXISTS SupplyChainDB;
+
+CREATE DATABASE SupplyChainDB;
+
+USE SupplyChainDB;
+
+Explanation:
+
+DROP DATABASE IF EXISTS
+removes the old database if it already exists.
+
+CREATE DATABASE
+creates a fresh database.
+
+USE
+selects the database for use.
+
+Run:
+
+CREATE TABLE Products (
+ProductID INT PRIMARY KEY,
+ProductName VARCHAR(100),
+Category VARCHAR(50)
+);
+
+Purpose:
+
+Stores information about products.
+
+Verify:
+
+SHOW TABLES;
+
+Run:
+
+CREATE TABLE Inventory (
+ProductID INT PRIMARY KEY,
+CurrentStock INT,
+ReorderLevel INT,
+FOREIGN KEY (ProductID)
+REFERENCES Products(ProductID)
+);
+
+Purpose:
+
+Stores inventory quantities.
+
+Verify:
+
+DESCRIBE Inventory;
+
+Run:
+
+CREATE TABLE Suppliers (
+SupplierID INT PRIMARY KEY,
+SupplierName VARCHAR(100),
+ContactPerson VARCHAR(100),
+City VARCHAR(50)
+);
+
+Purpose:
+
+Stores supplier information.
+
+Run:
+
+CREATE TABLE PurchaseOrders (
+PO_ID INT PRIMARY KEY,
+ProductID INT,
+SupplierID INT,
+OrderDate DATE,
+ExpectedDate DATE,
+ReceivedDate DATE,
+FOREIGN KEY (ProductID)
+REFERENCES Products(ProductID),
+FOREIGN KEY (SupplierID)
+REFERENCES Suppliers(SupplierID)
+);
+
+Purpose:
+
+Stores supplier orders and delivery dates.
+
+Run:
+
+INSERT INTO Products VALUES
+(101,'Laptop','Electronics'),
+(102,'Mouse','Electronics'),
+(103,'Keyboard','Electronics'),
+(104,'Monitor','Electronics'),
+(105,'Printer','Office Equipment'),
+(106,'Scanner','Office Equipment'),
+(107,'Router','Networking'),
+(108,'Webcam','Accessories');
+
+Verify:
+
+SELECT * FROM Products;
+
+Run:
+
+INSERT INTO Inventory VALUES
+(101,15,20),
+(102,200,50),
+(103,10,25),
+(104,75,40),
+(105,5,15),
+(106,30,20),
+(107,8,15),
+(108,100,40);
+
+Verify:
+
+SELECT * FROM Inventory;
+
+Run:
+
+INSERT INTO Suppliers VALUES
+(1,'ABC Suppliers','Rahul Sharma','Delhi'),
+(2,'XYZ Traders','Ankit Gupta','Mumbai'),
+(3,'Global Tech','Ravi Kumar','Bangalore'),
+(4,'Prime Electronics','Sanjay Singh','Chennai');
+
+Verify:
+
+SELECT * FROM Suppliers;
+
+Run:
+
+INSERT INTO PurchaseOrders VALUES
+(5001,101,1,'2025-05-01','2025-05-10','2025-05-12'),
+(5002,103,2,'2025-05-02','2025-05-08','2025-05-08'),
+(5003,105,3,'2025-05-05','2025-05-15','2025-05-18'),
+(5004,102,1,'2025-05-06','2025-05-12','2025-05-11'),
+(5005,104,2,'2025-05-07','2025-05-14','2025-05-16'),
+(5006,107,4,'2025-05-10','2025-05-20','2025-05-25'),
+(5007,108,3,'2025-05-12','2025-05-18','2025-05-18');
+
+Verify:
+
+SELECT * FROM PurchaseOrders;
+
+View products:
+
+SELECT * FROM Products;
+
+View inventory:
+
+SELECT * FROM Inventory;
+
+Sort inventory:
+
+SELECT *
+FROM Inventory
+ORDER BY CurrentStock DESC;
+
+Business Question:
+
+What stock level does each product have?
+
+Query:
+
+SELECT
+p.ProductName,
+i.CurrentStock,
+i.ReorderLevel
+FROM Products p
+INNER JOIN Inventory i
+ON p.ProductID = i.ProductID;
+
+Concept Learned:
+
+INNER JOIN
+
+Business Question:
+
+Which products require reordering?
+
+Query:
+
+SELECT
+ProductID,
+CurrentStock,
+ReorderLevel,
+CASE
+WHEN CurrentStock < ReorderLevel
+THEN 'Reorder Needed'
+ELSE 'Stock Available'
+END AS StockStatus
+FROM Inventory;
+
+Concept Learned:
+
+CASE WHEN
+
+Business Question:
+
+Which products are below reorder level?
+
+Query:
+
+SELECT
+p.ProductName,
+i.CurrentStock,
+i.ReorderLevel
+FROM Products p
+JOIN Inventory i
+ON p.ProductID = i.ProductID
+WHERE i.CurrentStock < i.ReorderLevel;
+
+Concept Learned:
+
+JOIN + WHERE
+
+Business Question:
+
+How many units should be ordered?
+
+Query:
+
+SELECT
+ProductID,
+CurrentStock,
+ReorderLevel,
+ReorderLevel - CurrentStock AS ReorderQuantity
+FROM Inventory
+WHERE CurrentStock < ReorderLevel;
+
+Concept Learned:
+
+Calculated Columns
+
+Business Question:
+
+Which shipments arrived late?
+
+Query:
+
+SELECT
+PO_ID,
+ProductID,
+ExpectedDate,
+ReceivedDate
+FROM PurchaseOrders
+WHERE ReceivedDate > ExpectedDate;
+
+Concept Learned:
+
+Date Comparison
+
+Business Question:
+
+Which suppliers are delivering late?
+
+Query:
+
+SELECT
+s.SupplierName,
+COUNT(*) AS TotalOrders,
+AVG(DATEDIFF(ReceivedDate, ExpectedDate))
+AS AverageDelayDays
+FROM PurchaseOrders po
+JOIN Suppliers s
+ON po.SupplierID = s.SupplierID
+GROUP BY s.SupplierName;
+
+Concept Learned:
+
+GROUP BY
+COUNT
+AVG
+DATEDIFF
+
+Business Question:
+
+Which products have excess inventory?
+
+Query:
+
+SELECT
+ProductID,
+CurrentStock,
+ReorderLevel
+FROM Inventory
+WHERE CurrentStock > ReorderLevel * 2;
+
+Concept Learned:
+
+Business Rules
+
+Business Question:
+
+Which products have stock below average?
+
+Query:
+
+SELECT *
+FROM Inventory
+WHERE CurrentStock <
+(
+SELECT AVG(CurrentStock)
+FROM Inventory
+);
+
+Concept Learned:
+
+Subqueries
+
+Total Products:
+
+SELECT COUNT(*) FROM Products;
+
+Total Inventory Units:
+
+SELECT SUM(CurrentStock) FROM Inventory;
+
+Products Requiring Reorder:
+
+SELECT COUNT(*)
+FROM Inventory
+WHERE CurrentStock < ReorderLevel;
+
+Delayed Shipments:
+
+SELECT COUNT(*)
+FROM PurchaseOrders
+WHERE ReceivedDate > ExpectedDate;
+
+Skills Learned:
+
+✓ Database Creation
+✓ Table Creation
+✓ INSERT Statements
+✓ SELECT Queries
+✓ ORDER BY
+✓ INNER JOIN
+✓ CASE WHEN
+✓ GROUP BY
+✓ COUNT
+✓ AVG
+✓ DATEDIFF
+✓ Business KPIs
+✓ Inventory Analytics
+✓ Supplier Analytics
+✓ Supply Chain Reporting
