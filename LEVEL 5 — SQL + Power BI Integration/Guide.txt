@@ -1,0 +1,408 @@
+LEVEL 5 — SQL + POWER BI INTEGRATION
+
+MySQL → SQL Queries → Power BI Dashboard
+
+In this project, you will learn how to:
+
+Create a database in MySQL
+Create tables and insert data
+Query data using SQL
+Connect Power BI to MySQL
+Build an interactive dashboard
+Create KPIs and business reports
+
+This is one of the most common workflows used by Data Analysts and Business Intelligence Professionals.
+
+Before starting, make sure you have installed:
+
+✓ MySQL Server
+✓ MySQL Workbench
+✓ Power BI Desktop
+
+IMPORTANT:
+
+MySQL Workbench is only a tool used to connect to the MySQL Server.
+
+If MySQL Workbench shows:
+
+UNCONNECTED
+
+it means you are not connected to a MySQL Server yet.
+
+Open MySQL Workbench
+Double-click:
+
+Local Instance MySQL80
+
+(or the available MySQL connection)
+
+Enter your password
+Verify the connection by running:
+
+SELECT VERSION();
+
+If a version number appears, the connection is successful.
+
+Example:
+
+8.0.43
+
+Run:
+
+CREATE DATABASE ecommerce_db;
+
+USE ecommerce_db;
+
+CUSTOMERS TABLE
+
+CREATE TABLE customers (
+customer_id INT PRIMARY KEY,
+customer_name VARCHAR(100),
+city VARCHAR(50),
+country VARCHAR(50)
+);
+
+PRODUCTS TABLE
+
+CREATE TABLE products (
+product_id INT PRIMARY KEY,
+product_name VARCHAR(100),
+category VARCHAR(50),
+price DECIMAL(10,2)
+);
+
+ORDERS TABLE
+
+CREATE TABLE orders (
+order_id INT PRIMARY KEY,
+customer_id INT,
+order_date DATE,
+FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+ORDER DETAILS TABLE
+
+CREATE TABLE order_details (
+detail_id INT PRIMARY KEY,
+order_id INT,
+product_id INT,
+quantity INT,
+FOREIGN KEY (order_id) REFERENCES orders(order_id),
+FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+CUSTOMERS
+
+INSERT INTO customers VALUES
+(1,'John Smith','New York','USA'),
+(2,'Sarah Johnson','Chicago','USA'),
+(3,'Michael Brown','Dallas','USA'),
+(4,'Emily Davis','London','UK'),
+(5,'David Wilson','Toronto','Canada');
+
+PRODUCTS
+
+INSERT INTO products VALUES
+(101,'Laptop','Electronics',1200),
+(102,'Mouse','Electronics',25),
+(103,'Keyboard','Electronics',50),
+(104,'Office Chair','Furniture',250),
+(105,'Desk','Furniture',400);
+
+ORDERS
+
+INSERT INTO orders VALUES
+(1001,1,'2025-01-10'),
+(1002,2,'2025-01-15'),
+(1003,3,'2025-02-01'),
+(1004,1,'2025-02-10'),
+(1005,4,'2025-02-15'),
+(1006,5,'2025-03-01');
+
+ORDER DETAILS
+
+INSERT INTO order_details VALUES
+(1,1001,101,1),
+(2,1001,102,2),
+(3,1002,104,1),
+(4,1003,103,3),
+(5,1004,105,1),
+(6,1005,101,1),
+(7,1006,104,2);
+
+Run:
+
+SELECT * FROM customers;
+
+SELECT * FROM products;
+
+SELECT * FROM orders;
+
+SELECT * FROM order_details;
+
+If data appears successfully, your database is ready.
+
+TOTAL SALES
+
+SELECT
+SUM(p.price * od.quantity) AS total_sales
+FROM order_details od
+JOIN products p
+ON od.product_id = p.product_id;
+
+SALES BY PRODUCT
+
+SELECT
+p.product_name,
+SUM(od.quantity) AS units_sold,
+SUM(p.price * od.quantity) AS revenue
+FROM order_details od
+JOIN products p
+ON od.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY revenue DESC;
+
+TOP CUSTOMERS
+
+SELECT
+c.customer_name,
+SUM(p.price * od.quantity) AS total_spent
+FROM customers c
+JOIN orders o
+ON c.customer_id = o.customer_id
+JOIN order_details od
+ON o.order_id = od.order_id
+JOIN products p
+ON od.product_id = p.product_id
+GROUP BY c.customer_name
+ORDER BY total_spent DESC;
+
+IMPORTANT CONCEPT
+
+A SQL file saved on your Desktop is NOT a database.
+
+Power BI cannot connect directly to a .sql file.
+
+Workflow:
+
+SQL Script File
+↓
+Run Script in MySQL Workbench
+↓
+Data Stored in MySQL Database
+↓
+Power BI Connects to Database
+
+Open Power BI Desktop
+
+Click:
+
+Get Data
+↓
+MySQL Database
+
+Server Name
+
+Try:
+
+localhost
+
+If it does not work:
+
+127.0.0.1
+
+or
+
+localhost:3306
+
+Database Name
+
+ecommerce_db
+
+Authentication
+
+Username:
+
+root
+
+Password:
+
+(Your MySQL password)
+
+If Power BI shows:
+
+"The connector requires one or more additional components"
+
+Install MySQL Connector/NET and restart Power BI.
+
+Select:
+
+✓ customers
+
+✓ products
+
+✓ orders
+
+✓ order_details
+
+Click:
+
+Load
+
+Power BI will import all tables.
+
+Open Model View.
+
+Create relationships:
+
+customers.customer_id
+↓
+orders.customer_id
+
+orders.order_id
+↓
+order_details.order_id
+
+products.product_id
+↓
+order_details.product_id
+
+These relationships allow Power BI to combine data from multiple tables.
+
+Go to:
+
+Modeling
+↓
+New Measure
+
+Paste:
+
+Total Revenue =
+SUMX(
+order_details,
+order_details[quantity] *
+RELATED(products[price])
+)
+
+Press Enter.
+
+KPI CARD
+
+Visual:
+
+Card
+
+Field:
+
+Total Revenue
+
+REVENUE BY PRODUCT
+
+Visual:
+
+Clustered Bar Chart
+
+Axis:
+
+products.product_name
+
+Values:
+
+Total Revenue
+
+REVENUE BY CATEGORY
+
+Visual:
+
+Pie Chart
+
+Legend:
+
+products.category
+
+Values:
+
+Total Revenue
+
+TOP CUSTOMERS
+
+Visual:
+
+Table
+
+Fields:
+
+customers.customer_name
+
+Total Revenue
+
+MONTHLY SALES TREND
+
+Create New Column:
+
+Month =
+FORMAT(orders[order_date],"YYYY-MM")
+
+Visual:
+
+Line Chart
+
+Axis:
+
+Month
+
+Values:
+
+Total Revenue
+
+NEW MEASURE
+
+Total Orders =
+DISTINCTCOUNT(orders[order_id])
+
+NEW MEASURE
+
+Total Customers =
+DISTINCTCOUNT(customers[customer_id])
+
+NEW MEASURE
+
+Average Order Value =
+DIVIDE([Total Revenue],[Total Orders])
+
+Display all of them using Card visuals.
+
++------------------------------------------------+
+| Total Revenue |
++------------------------------------------------+
+
++----------------------+-------------------------+
+| Revenue By Product | Revenue By Category |
++----------------------+-------------------------+
+
++------------------------------------------------+
+| Monthly Revenue Trend |
++------------------------------------------------+
+
++------------------------------------------------+
+| Top Customers |
++------------------------------------------------+
+
++------------------------------------------------+
+| Category Slicer |
++------------------------------------------------+
+
+✓ Database Creation
+✓ Table Design
+✓ Primary Keys
+✓ Foreign Keys
+✓ SQL Joins
+✓ Aggregations
+✓ Business Reporting Queries
+✓ MySQL Workbench
+✓ Power BI Connection
+✓ Relationships
+✓ DAX Measures
+✓ KPI Cards
+✓ Charts
+✓ Dashboard Design
