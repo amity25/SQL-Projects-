@@ -1,5 +1,6 @@
--- Day 2 – Tuesday (9 June)
+-- Day 2
 -- Topic: WHERE Basics
+-- Filtering Data with WHERE
 
 -- 1. Employees in IT
 SELECT * FROM employees
