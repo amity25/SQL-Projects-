@@ -1,5 +1,4 @@
--- Day 6 – Saturday (13 June)
--- Topic: LIMIT
+-- Day 6 - Topic: LIMIT
 
 -- 1. First 5 employees
 SELECT * 
