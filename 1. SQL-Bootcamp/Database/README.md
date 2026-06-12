@@ -1,1 +1,1 @@
-
+Run the database files employees_data and employees_table in MYSQL Workbench before start practicing for day 1 and so on. If you haven't installed workbench, please install it with instructions from google or youtube video tutorials. 
