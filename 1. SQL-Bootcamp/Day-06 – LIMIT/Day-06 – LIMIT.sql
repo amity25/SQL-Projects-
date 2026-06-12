@@ -1,3 +1,4 @@
+-- SQL Practice Series
 -- Day 6 - Topic: LIMIT
 
 -- 1. First 5 employees
