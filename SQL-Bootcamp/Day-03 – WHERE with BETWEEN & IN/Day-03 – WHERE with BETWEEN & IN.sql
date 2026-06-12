@@ -1,4 +1,4 @@
--- Day 3 – Wednesday, 10 June
+-- Day 3
 -- More WHERE Conditions Practice
 -- Advanced Filtering with BETWEEN & IN
 
