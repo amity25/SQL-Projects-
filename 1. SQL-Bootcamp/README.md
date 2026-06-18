@@ -14,18 +14,23 @@ A beginner-friendly SQL practice repository designed to help learners build SQL 
 * LIMIT
 * Mini Project
 
+### Week 2
+
+* COUNT()
+* SUM()
+* AVG()
+* MIN()
+* MAX()
+* GROUP BY
+* HAVING
+
 ## 📂 Repository Structure
 
 ```text
 SQL-Bootcamp/
 │
 ├── Day-01-SELECT-Basics.sql
-├── Day-02-WHERE.sql
-├── Day-03-WHERE WITH BETWEEN & IN
-├── Day-04-ORDER-BY.sql
-├── Day-05-WHERE + ORDER BY
-├── Day-06-LIMIT.sql
-├── Day-07-Mini Project.sql
+├── .................
 │
 ├── Database/
 │   ├── employees_table.sql
