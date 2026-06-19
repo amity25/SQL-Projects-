@@ -102,6 +102,16 @@ By completing these exercises, learners will be able to:
 * Sort results using ORDER BY
 * Limit output using LIMIT
 * Build confidence working with SQL datasets
+* Count records using COUNT()
+* Calculate totals using SUM()
+* Analyze averages using AVG()
+* Identify highest and lowest values using MIN() and MAX()
+* Group data using GROUP BY
+* Filter grouped results using HAVING
+* Generate meaningful business reports from raw data
+* Analyze department performance and employee metrics
+* Build confidence using SQL aggregate functions
+* Develop a foundation for data analytics and business intelligence reporting 
 
 ## 🤝 Connect
 
